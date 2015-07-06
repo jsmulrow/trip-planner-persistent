@@ -1,8 +1,8 @@
 var express = require('express'),
-	logger = require('morgan'),
-	bodyParser = require('body-parser'),
-	swig = require('swig'),
-	sassMiddleware = require('node-sass-middleware');
+    logger = require('morgan'),
+    bodyParser = require('body-parser'),
+    swig = require('swig'),
+    sassMiddleware = require('node-sass-middleware');
 
 var app = express();
 
@@ -33,6 +33,9 @@ app.use(express.static(__dirname + '/public'));
 // serve root
 app.use('/', require('./routes'));
 
+app.use('/days', require('./routes/days'));
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -45,12 +48,12 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     console.log({error: err});
     res.render('error', {
-    	error: err
+        error: err
     });
 });
 
 // listen on a port
 var port = 3000;
 app.listen(port, function () {
-	console.log('The server is listening closely on port', port);
+    console.log('The server is listening closely on port', port);
 });
