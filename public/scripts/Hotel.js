@@ -44,28 +44,29 @@ $(document).ready(function() {
 
     //replaces entire prototype pbject to be return value of generateAttractionFunction
     console.log('BEGIN HOTEL PROTOTYPE');
-    Hotel.prototype = generateAttraction({
-        icon: '/images/lodging_0star.png',
-        $listGroup: $('#my-hotel .list-group'),
-        $all: $('#all-hotels'),
-        all: all_hotels,
-        constructor: Hotel
-    });
-    console.log("END HOTEL PROTO");
-
-    Hotel.prototype.delete = function() {
-        // // front-end
-        currentDay.hotel
-            .eraseMarker()
-            .eraseItineraryItem();
-        currentDay.hotel = null;
-
-        // // back-end
-        // remove reference to this hotel from the current day
-        $.ajax({
-            type: 'DELETE',
-            url: '/days/' + currentDay._id + '/hotel',
-            data: {dayID: currentDay._id}
+    $.get('/hotels', function(all_hotels) {
+        Hotel.prototype = generateAttraction({
+            icon: '/images/lodging_0star.png',
+            $listGroup: $('#my-hotel .list-group'),
+            $all: $('#all-hotels'),
+            all: all_hotels,
+            constructor: Hotel
         });
-    };
+        Hotel.prototype.delete = function() {
+            // // front-end
+            currentDay.hotel
+                .eraseMarker()
+                .eraseItineraryItem();
+            currentDay.hotel = null;
+
+            // // back-end
+            // remove reference to this hotel from the current day
+            $.ajax({
+                type: 'DELETE',
+                url: '/days/' + currentDay._id + '/hotel',
+                data: {dayID: currentDay._id}
+            });
+        };
+        console.log("END HOTEL PROTO");
+    });
 });

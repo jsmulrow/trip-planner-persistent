@@ -36,13 +36,6 @@
 		<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDfQxgWt-LSZcEmTEN8581Uq9SzZHnpuys&sensor=true"></script>
-		<script>
-		{% autoescape false %}
-		var all_hotels = {{ all_hotels | json }};
-		var all_restaurants = {{ all_restaurants | json }};
-		var all_things_to_do = {{ all_things_to_do | json }};
-		{% endautoescape %}
-		</script>
 		<script src="/scripts/map.js"></script>
 		<script src="/scripts/generateAttraction.js"></script>
 		<script src="/scripts/Hotel.js"></script>

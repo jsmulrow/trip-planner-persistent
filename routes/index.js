@@ -35,7 +35,7 @@ router.get('/',
 		res.render('index');
 	});
 
-router.get('/hotels', function () {
+router.get('/hotels', function (req, res) {
 	models.Hotel
 		.find({})
 		.exec(function (err, hotels) {
@@ -44,7 +44,7 @@ router.get('/hotels', function () {
 		});
 });
 
-router.get('/restaurants', function () {
+router.get('/restaurants', function (req, res) {
 	models.Restaurant
 		.find({})
 		.exec(function (err, restaurants) {
@@ -53,7 +53,7 @@ router.get('/restaurants', function () {
 		});
 });
 
-router.get('/thingsToDo', function () {
+router.get('/thingsToDo', function (req, res) {
 	models.ThingToDo
 		.find({})
 		.exec(function (err, thingsToDo) {

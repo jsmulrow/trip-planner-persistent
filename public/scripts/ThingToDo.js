@@ -33,28 +33,29 @@ $(document).ready(function () {
         });
 	};
 
-	ThingToDo.prototype = generateAttraction({
-		icon: '/images/star-3.png',
-		$listGroup: $('#my-things-to-do .list-group'),
-		$all: $('#all-things-to-do'),
-		all: all_things_to_do,
-		constructor: ThingToDo
+	$.get('/thingsToDo', function(all_things_to_do) {
+		ThingToDo.prototype = generateAttraction({
+			icon: '/images/star-3.png',
+			$listGroup: $('#my-things-to-do .list-group'),
+			$all: $('#all-things-to-do'),
+			all: all_things_to_do,
+			constructor: ThingToDo
+		});
+		ThingToDo.prototype.delete = function () {
+			// // front-end
+			var index = currentDay.thingsToDo.indexOf(this),
+				removed = currentDay.thingsToDo.splice(index, 1)[0];
+			removed
+				.eraseMarker()
+				.eraseItineraryItem();
+
+			// // back-end
+		    // remove reference to this hotel from the current day
+		    $.ajax({
+		        type: 'DELETE',
+		        url: '/days/' + currentDay._id + '/thingsToDo/' + this._id,
+		        data: {dayID: currentDay._id}
+		    });
+		};
 	});
-
-	ThingToDo.prototype.delete = function () {
-		// // front-end
-		var index = currentDay.thingsToDo.indexOf(this),
-			removed = currentDay.thingsToDo.splice(index, 1)[0];
-		removed
-			.eraseMarker()
-			.eraseItineraryItem();
-
-		// // back-end
-        // remove reference to this hotel from the current day
-        $.ajax({
-            type: 'DELETE',
-            url: '/days/' + currentDay._id + '/thingsToDo/' + this._id,
-            data: {dayID: currentDay._id}
-        });
-	};
 });
