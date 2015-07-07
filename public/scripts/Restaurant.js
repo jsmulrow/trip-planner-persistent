@@ -1,17 +1,41 @@
 var Restaurant;
 
 $(document).ready(function () {
-	Restaurant = function (data) {
+	Restaurant = function (data, loaded) {
 		var self = this;
 		eachKeyValue(data, function (key, val) {
 			self[key] = val;
 		});
-		this.buildMarker()
-			.drawMarker()
-			.buildItineraryItem()
-			.drawItineraryItem();
-		currentDay.restaurants.push(this);
-	}
+
+		// if already loaded, don't query db
+        if (loaded) {
+            // update html and the map
+            self.buildMarker()
+                .buildItineraryItem();
+            return;
+        }
+
+        // save the restaurant's id to the day
+        $.ajax({
+            type: 'POST',
+            url: '/days/' + currentDay._id + '/restaurants',
+            data: {dayID: currentDay._id, restaurantID: self._id},
+            success: function(resData) {
+
+                // update the current day (actual restaurant object)
+                currentDay.restaurants.push(self);
+
+                // update html and the map
+                self.buildMarker()
+                    .drawMarker()
+                    .buildItineraryItem()
+                    .drawItineraryItem();
+
+                console.log('currentDay', currentDay);
+                console.log('restaurant after the update:', self);
+            }
+        });
+	};
 
 	Restaurant.prototype = generateAttraction({
 		icon: '/images/restaurant.png',
@@ -22,10 +46,22 @@ $(document).ready(function () {
 	});
 
 	Restaurant.prototype.delete = function () {
+		// // front-end
 		var index = currentDay.restaurants.indexOf(this),
 			removed = currentDay.restaurants.splice(index, 1)[0];
 		removed
 			.eraseMarker()
 			.eraseItineraryItem();
+
+		// // back-end
+        // remove reference to this hotel from the current day
+        $.ajax({
+            type: 'DELETE',
+            url: '/days/' + currentDay._id + '/restaurants/' + this._id,
+            data: {dayID: currentDay._id},
+            success: function(resData) {
+                console.log(resData);
+            }
+        });
 	};
 });
