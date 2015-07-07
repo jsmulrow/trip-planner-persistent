@@ -7,11 +7,11 @@ var models = require('../models');
 dayRouter.get('/', function (req, res, next) {
     // serves up all days as json - populated
     models.Day.find().sort({number: 1}).populate('hotel restaurants thingsToDo').exec()
-    	.then(function(days) {
-    		res.json(days);
-    	}, function(err) {
-    		next(err);
-    	});
+	.then(function(days) {
+		res.json(days);
+	}, function(err) {
+		next(err);
+	});
 });
 // POST /days
 dayRouter.post('/', function (req, res, next) {
@@ -19,68 +19,63 @@ dayRouter.post('/', function (req, res, next) {
 
     // find the number of existing days
     models.Day.find().exec()
-        .then(function(data) {
-            // length of all results is the number of days
-            return data.length;
-        })
-        .then(function(len) {
-            // make the new day (length + 1)
-            var newDay = new models.Day({
-                number: len + 1,
-                hotel: null
-            });
-            // save and return it as json
-            newDay.save(function(err, day) {
-                res.json(day);
-            });
-        })
-        // catch errors
-        .then(null, function(err) {
-            next(err);
+    .then(function(data) {
+        // length of all results is the number of days
+        return data.length;
+    })
+    .then(function(len) {
+        // make the new day (length + 1)
+        var newDay = new models.Day({
+            number: len + 1,
+            hotel: null
         });
+        // save and return it as json
+        newDay.save(function(err, day) {
+            res.json(day);
+        });
+    })
+    // catch errors
+    .then(null, function(err) {
+        next(err);
+    });
 });
 // GET /days/:id
 dayRouter.get('/:id', function (req, res, next) {
     // serves a particular day as json
     models.Day.find({_id: req.params.id}).exec()
-    	.then(function(day) {
-    		res.json(day);
-    	}, function(err) {
-    		next(err);
-    	});
+	.then(function(day) {
+		res.json(day);
+	}, function(err) {
+		next(err);
+	});
 });
 // DELETE /days/:id
 dayRouter.delete('/:id', function (req, res, next) {
 
-    console.log('inside the day delete');
-    console.log(req.body);
-
     // deletes a particular day
     models.Day.remove({_id: req.params.id}).exec()
-    	.then(function(day) {
-            // decrement number for each day greater than deleted one
-            return models.Day.update(
-                {number: {$gt: req.body.dayNum}},
-                {$inc: {number: -1}},
-                {multi: true}
-            ).exec();
-    	})
-        .then(function(numAffected) {
-            res.json(numAffected);
-        })
-        // error handler
-        .then(null, function(err) {
-            console.log('error delete handler');
-            next(err);
-        });
+	.then(function(day) {
+        // decrement number for each day greater than deleted one
+        return models.Day.update(
+            {number: {$gt: req.body.dayNum}},
+            {$inc: {number: -1}},
+            {multi: true}
+        ).exec();
+	})
+    .then(function(numAffected) {
+        res.json(numAffected);
+    })
+    // error handler
+    .then(null, function(err) {
+        console.log('error delete handler');
+        next(err);
+    });
 });
 
 dayRouter.use('/:id', attractionRouter);
 // POST /days/:id/hotel
 attractionRouter.post('/hotel', function (req, res, next) {
     // creates a reference to the hotel
-
-    console.log(req.body);
 
     models.Day.findByIdAndUpdate(
         // day's id
@@ -96,8 +91,6 @@ attractionRouter.post('/hotel', function (req, res, next) {
 // DELETE /days/:id/hotel
 attractionRouter.delete('/hotel', function (req, res, next) {
     // deletes the reference of the hotel
-
-    console.log('deleting hotel');
 
     models.Day.findByIdAndUpdate(
         // day's id

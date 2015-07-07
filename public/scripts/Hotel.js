@@ -16,6 +16,11 @@ $(document).ready(function() {
             return;
         }
 
+        // remove old hotel (if there is one)
+        if (currentDay.hotel) {
+            currentDay.hotel.delete();
+        }
+
         // save the hotel's id to the day
         $.ajax({
             type: 'POST',
@@ -25,7 +30,6 @@ $(document).ready(function() {
                 hotelID: self._id
             },
             success: function(resData) {
-
                 // update the current day (actual hotel object)
                 currentDay.hotel = self;
 
@@ -34,9 +38,6 @@ $(document).ready(function() {
                     .drawMarker()
                     .buildItineraryItem()
                     .drawItineraryItem();
-
-                console.log('current day', currentDay);
-                console.log('after the update:', self);
             }
         });
     };
@@ -64,11 +65,7 @@ $(document).ready(function() {
         $.ajax({
             type: 'DELETE',
             url: '/days/' + currentDay._id + '/hotel',
-            data: {dayID: currentDay._id},
-            success: function(resData) {
-                console.log(resData);
-            }
+            data: {dayID: currentDay._id}
         });
-
     };
 });

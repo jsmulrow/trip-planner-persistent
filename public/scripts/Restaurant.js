@@ -15,13 +15,17 @@ $(document).ready(function () {
             return;
         }
 
+        // limit to three restaurants
+        if (currentDay.restaurants.length >= 3) {
+            return;
+        }
+
         // save the restaurant's id to the day
         $.ajax({
             type: 'POST',
             url: '/days/' + currentDay._id + '/restaurants',
             data: {dayID: currentDay._id, restaurantID: self._id},
             success: function(resData) {
-
                 // update the current day (actual restaurant object)
                 currentDay.restaurants.push(self);
 
@@ -30,9 +34,6 @@ $(document).ready(function () {
                     .drawMarker()
                     .buildItineraryItem()
                     .drawItineraryItem();
-
-                console.log('currentDay', currentDay);
-                console.log('restaurant after the update:', self);
             }
         });
 	};
@@ -58,10 +59,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'DELETE',
             url: '/days/' + currentDay._id + '/restaurants/' + this._id,
-            data: {dayID: currentDay._id},
-            success: function(resData) {
-                console.log(resData);
-            }
+            data: {dayID: currentDay._id}
         });
 	};
 });

@@ -28,7 +28,6 @@ $(document).ready(function() {
             data: null,
             success: function(resData) {
                 // save new day in the browser
-                console.log('made a new day');
                 eachKeyValue(resData, function (key, val) {
                     self[key] = val;
                 });
@@ -72,9 +71,6 @@ $(document).ready(function() {
 
     // remove old day's data, display current day's
     Day.prototype.switchTo = function() {
-
-        console.log(currentDay);
-
         // remove old day data
         function eraseOne(attraction) {
             attraction.eraseMarker().eraseItineraryItem();
@@ -118,17 +114,8 @@ $(document).ready(function() {
             $.ajax({
                 type: 'DELETE',
                 url: '/days/' + currentDay._id,
-                data: {dayNum: currentDay.number},
-                success: function(resData) {
-                    console.log('deleted');
-                    console.log('and updated indexes');
-
-                }
+                data: {dayNum: currentDay.number}
             });
-            // update number for db entries
-            // only days with number greater than the one just deleted need to be decremented by 1
-
-
 
             // update html
             newCurrent.switchTo();

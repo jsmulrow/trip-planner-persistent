@@ -21,7 +21,6 @@ $(document).ready(function () {
             url: '/days/' + currentDay._id + '/thingsToDo',
             data: {dayID: currentDay._id, thingToDoID: self._id},
             success: function(resData) {
-
                 // update the current day (actual thing object)
                 currentDay.thingsToDo.push(self);
 
@@ -30,9 +29,6 @@ $(document).ready(function () {
                     .drawMarker()
                     .buildItineraryItem()
                     .drawItineraryItem();
-
-                console.log('currentDay', currentDay);
-                console.log('thing after the update:', self);
             }
         });
 	};
@@ -58,10 +54,7 @@ $(document).ready(function () {
         $.ajax({
             type: 'DELETE',
             url: '/days/' + currentDay._id + '/thingsToDo/' + this._id,
-            data: {dayID: currentDay._id},
-            success: function(resData) {
-                console.log(resData);
-            }
+            data: {dayID: currentDay._id}
         });
 	};
 });

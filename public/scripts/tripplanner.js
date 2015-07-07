@@ -1,6 +1,6 @@
 function eachKeyValue(obj, onEach) {
     Object.keys(obj).forEach(function(key) {
-        onEach(key, obj[key])
+        onEach(key, obj[key]);
     });
 }
 
@@ -19,8 +19,7 @@ $(document).ready(function() {
 		    	day.$button.addClass('current-day');
 		    });
     	} else {
-    		// otherwise, load the days
-
+    		// // otherwise, load the days
     		// convert each returned mongo object into a day
     		days = resData.map(function(mongoObj) {
     			return new Day(null, mongoObj);
@@ -37,12 +36,12 @@ $(document).ready(function() {
 
 		    // display the first day's data
 		    currentDay.switchTo();
-
-		    console.log(days);
     	}
     });
 });
 
+// convert all mongodb objects in the given day to the corresponding
+//   object made with the custom constructor functions
 function convertFromMongo(day) {
 	if (day.hotel) {
 		day.hotel = new Hotel(day.hotel, true);

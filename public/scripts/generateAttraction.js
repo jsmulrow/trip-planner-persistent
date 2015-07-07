@@ -15,7 +15,6 @@ $(document).ready(function() {
             config.$all.find('select').append($option);
         });
 
-
         return {
             eraseMarker: function() {
                 this.marker.setMap(null);
